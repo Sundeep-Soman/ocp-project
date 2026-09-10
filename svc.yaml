@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sre-monitor
+  namespace: sre-monitor
+  labels:
+    app: sre-monitor
+spec:
+  selector:
+    app: sre-monitor
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
