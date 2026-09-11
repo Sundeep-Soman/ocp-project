@@ -1,0 +1,66 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-deny-test-namespaces
+  namespace: cluster2-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: deny-test-namespaces-config
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            # 1) The admission policy (the rule itself)
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: admissionregistration.k8s.io/v1
+                kind: ValidatingAdmissionPolicy
+                metadata:
+                  name: deny-test-namespaces
+                spec:
+                  failurePolicy: Fail
+                  matchConstraints:
+                    resourceRules:
+                      - apiGroups:   [""]
+                        apiVersions: ["v1"]
+                        operations:  ["CREATE"]
+                        resources:   ["namespaces"]
+                  validations:
+                    - expression: "!object.metadata.name.startsWith('test')"
+                      message: "Namespaces starting with 'test' are not allowed."
+                      reason: Forbidden
+            # 2) The binding (activates the rule in Deny mode)
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: admissionregistration.k8s.io/v1
+                kind: ValidatingAdmissionPolicyBinding
+                metadata:
+                  name: deny-test-namespaces-binding
+                spec:
+                  policyName: deny-test-namespaces
+                  validationActions: ["Deny"]
+                  matchResources: {}
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-deny-test-namespaces
+  namespace: cluster2-policies
+placementRef:
+  name: placement-cluster2
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: policy-deny-test-namespaces
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
