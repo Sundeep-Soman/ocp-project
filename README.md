@@ -229,6 +229,12 @@ Operators are installed/configured through RHACM policies. The implementation in
 
 ## 7. SRE Application
 
+The SRE Monitor application is deployed to cluster2 using RHACM and OpenShift GitOps/Argo CD.
+
+For TLS configuration, the cert-manager Operator is installed on cluster2 through an RHACM policy. A Let's Encrypt ClusterIssuer is then configured using the Route 53 DNS-01 challenge to obtain the TLS certificate for sre.etcd.store.
+
+The certificate is stored as sre-etcd-store-tls and is used by the OpenShift Route to provide HTTPS access to the SRE Monitor application.
+
 The SRE monitoring application is implemented in Python and deployed to `cluster2`.
 
 Endpoints:
