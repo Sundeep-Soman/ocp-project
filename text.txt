@@ -234,5 +234,6 @@ added cname  in route 53
 
  
 
-
+User name	Password	Console sign-in URL
+ocp-admin	Sundeep@789*	https://617619405802.signin.aws.amazon.com/console
 
