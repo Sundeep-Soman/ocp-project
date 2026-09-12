@@ -29,8 +29,37 @@ spec:
     termination: edge
     externalCertificate:
       name: sre-etcd-store-tls
-
-
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: router-cert-access
+  namespace: sre-monitor
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames:
+    - sre-etcd-store-tls
+  verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: router-cert-access
+  namespace: sre-monitor
+subjects:
+- kind: ServiceAccount
+  name: router
+  namespace: openshift-ingress
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: router-cert-access
+  
+---
 # apiVersion: route.openshift.io/v1
 # kind: Route
 # metadata:
