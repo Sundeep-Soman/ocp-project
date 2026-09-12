@@ -18,14 +18,32 @@ kind: Route
 metadata:
   name: sre
   namespace: sre-monitor
-  labels:
-    app: sre-monitor
 spec:
   host: sre.etcd.store
   to:
     kind: Service
     name: sre-monitor
-    weight: 100
   port:
     targetPort: http
-  wildcardPolicy: None
+  tls:
+    termination: edge
+    externalCertificate:
+      name: sre-etcd-store-tls
+
+
+# apiVersion: route.openshift.io/v1
+# kind: Route
+# metadata:
+#   name: sre
+#   namespace: sre-monitor
+#   labels:
+#     app: sre-monitor
+# spec:
+#   host: sre.etcd.store
+#   to:
+#     kind: Service
+#     name: sre-monitor
+#     weight: 100
+#   port:
+#     targetPort: http
+#   wildcardPolicy: None
