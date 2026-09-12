@@ -1,0 +1,35 @@
+# Purpose: Creates an Argo CD ApplicationSet that deploys the SRE monitor to ACM-selected cluster2.
+# Important: The ACM placement label connects Argo CD to the cluster2 Placement.
+# Important: automated prune and selfHeal keep the deployed state aligned with Git.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: sre-monitor
+  namespace: openshift-gitops
+spec:
+  generators:
+    - clusterDecisionResource:
+        configMapRef: acm-placement
+        labelSelector:
+          matchLabels:
+            cluster.open-cluster-management.io/placement: cluster2-placement
+        requeueAfterSeconds: 30
+  template:
+    metadata:
+      name: 'sre-monitor-{{name}}'
+    spec:
+      project: default
+      source:
+        # Lab Git repository intentionally public for this assessment GitOps workflow.
+        repoURL: https://github.com/Sundeep-Soman/ocp-project.git
+        targetRevision: main
+        path: sre-monitor
+      destination:
+        server: '{{server}}'
+        namespace: sre-monitor
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

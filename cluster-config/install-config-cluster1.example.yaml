@@ -1,0 +1,45 @@
+# Purpose: Example sanitized OpenShift install-config for the single-node cluster1 lab environment.
+# Important: This is a sanitized example only; insert the real pull secret and SSH public key securely during installation.
+# Important: replicas=1 for the control plane and replicas=0 for workers define the single-node lab topology.
+#
+additionalTrustBundlePolicy: Proxyonly
+apiVersion: v1
+baseDomain: etcd.store
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  replicas: 0
+  platform:
+    aws:
+      zones:
+        - ap-south-1b  
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  replicas: 1
+  platform:
+    aws:
+      type: m6i.2xlarge
+      zones:
+        - ap-south-1b
+metadata:
+  name: cluster1
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.0.0.0/16
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    ipFamily: IPv4
+    region: ap-south-1
+    vpc: {}
+publish: External
+pullSecret: '<REDACTED>'
+sshKey: '<REDACTED_PUBLIC_KEY>'

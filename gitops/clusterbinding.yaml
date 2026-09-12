@@ -1,0 +1,9 @@
+# Purpose: Grants the openshift-gitops namespace access to the ACM default ManagedClusterSet.
+# Important: This enables GitOpsCluster/ApplicationSet integration with ACM-managed clusters.
+apiVersion: cluster.open-cluster-management.io/v1beta2
+kind: ManagedClusterSetBinding
+metadata:
+  name: default
+  namespace: openshift-gitops
+spec:
+  clusterSet: default

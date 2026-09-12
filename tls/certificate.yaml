@@ -1,0 +1,15 @@
+# Purpose: Requests a Let's Encrypt TLS certificate for sre.etcd.store through cert-manager.
+# Important: The generated Secret sre-etcd-store-tls is consumed by the OpenShift Route.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: sre-etcd-store
+  namespace: sre-monitor
+spec:
+  secretName: sre-etcd-store-tls
+  issuerRef:
+    name: letsencrypt-route53
+    kind: ClusterIssuer
+  commonName: sre.etcd.store
+  dnsNames:
+    - sre.etcd.store

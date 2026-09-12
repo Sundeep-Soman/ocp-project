@@ -1,0 +1,9 @@
+# Purpose: Creates the dedicated namespace for the SRE monitoring application.
+# Important: Keeping the application in a dedicated namespace simplifies RBAC, troubleshooting, and GitOps ownership.
+#
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sre-monitor
+  labels:
+    app: sre-monitor

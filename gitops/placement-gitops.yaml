@@ -1,0 +1,16 @@
+# Purpose: Selects cluster2 as the target cluster for the Argo CD GitOps workflow.
+# Important: The placement name is referenced by GitOpsCluster and the ACM placement decision resource.
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: cluster2-placement
+  namespace: openshift-gitops
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: name
+              operator: In
+              values:
+                - cluster2

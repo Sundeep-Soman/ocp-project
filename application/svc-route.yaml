@@ -1,0 +1,65 @@
+# Purpose: Exposes the SRE monitor through an OpenShift Service and HTTPS Route, and grants the router access to its TLS secret.
+# Important: The Route uses edge TLS termination and references the externally managed certificate Secret.
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: sre-monitor
+  namespace: sre-monitor
+  labels:
+    app: sre-monitor
+spec:
+  selector:
+    app: sre-monitor
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: sre
+  namespace: sre-monitor
+spec:
+  host: sre.etcd.store
+  to:
+    kind: Service
+    name: sre-monitor
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    externalCertificate:
+      name: sre-etcd-store-tls
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: router-cert-access
+  namespace: sre-monitor
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames:
+    - sre-etcd-store-tls
+  verbs:
+    - get
+    - watch
+    - list
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: router-cert-access
+  namespace: sre-monitor
+subjects:
+- kind: ServiceAccount
+  name: router
+  namespace: openshift-ingress
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: router-cert-access
+  
+---

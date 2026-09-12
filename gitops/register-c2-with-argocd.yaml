@@ -1,0 +1,16 @@
+# Purpose: Registers ACM-selected managed clusters with the local Argo CD instance in openshift-gitops.
+# Important: GitOpsCluster uses the cluster2 placement to determine which managed cluster is registered.
+apiVersion: apps.open-cluster-management.io/v1beta1
+kind: GitOpsCluster
+metadata:
+  name: cluster2
+  namespace: openshift-gitops
+spec:
+  argoServer:
+    cluster: local-cluster
+    argoNamespace: openshift-gitops
+  placementRef:
+    apiVersion: cluster.open-cluster-management.io/v1beta1
+    kind: Placement
+    name: cluster2-placement
+    namespace: openshift-gitops
