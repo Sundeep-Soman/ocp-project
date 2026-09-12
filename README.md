@@ -312,4 +312,4 @@ Credentials are not stored in this repository. Passwords, private SSH keys, Open
 
 ## Lab Repository Visibility
 
-For this assessment/lab purpose, the GitHub repository and Docker Hub image repository are intentionally kept public to simplify access and demonstrate the GitOps workflow. This is a lab convenience and is not the recommended production security posture. No production secrets should be stored in either repository.
+For this assessment/lab purpose, the GitHub repository and Docker Hub image repository are intentionally kept public to simplify access and demonstrate the GitOps workflow. The kubeadmin account is also used for administrative access in this lab environment. This is a lab convenience and is not the recommended production security posture. No production secrets should be stored in either repository.
