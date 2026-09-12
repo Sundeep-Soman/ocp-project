@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-route53
+spec:
+  acme:
+    email: learndevops33@gmail.com
+
+    server: https://acme-v02.api.letsencrypt.org/directory
+
+    privateKeySecretRef:
+      name: letsencrypt-route53-account
+
+    solvers:
+      - dns01:
+          route53:
+            region: ap-south-1
+
+            hostedZoneID: Z0090885357R3XH6AW0MQ
+
+            accessKeyID: AKIAY7TH4HPVCMAX2YW3
+
+            secretAccessKeySecretRef:
+              name: route53-credentials
+              key: secret-access-key
