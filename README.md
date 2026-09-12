@@ -97,10 +97,9 @@ The VMs are kept **OFF when they are not required**.
 ## Repository Structure
 
 ```text
-OpenShift_ACM_GitOps_Assignment/
+OCP-PROJECT/
+│
 ├── README.md
-├── app.py
-├── Dockerfile
 │
 ├── acm/
 │   ├── policies/
@@ -108,12 +107,39 @@ OpenShift_ACM_GitOps_Assignment/
 │   └── bindings/
 │
 ├── gitops/
+│   ├── argocd-app-sre-monitor.yaml
+│   ├── clusterbinding.yaml
+│   ├── placement-gitops.yaml
+│   └── register-c2-with-argocd.yaml
+│
 ├── operators/
+│   └── cert-manager-policy.yaml
+│
 ├── application/
-├── cluster-config/
+│   ├── deployment.yaml
+│   ├── ns.yaml
+│   ├── sa-rbac.yaml
+│   └── svc-route.yaml
+│
+├── sre-monitor/                    # GitOps folder used by Argo CD for deployment
+│
 ├── tls/
+│   ├── certificate.yaml
+│   ├── cluster-issuer.yaml
+│   ├── rbac.yaml
+│   └── secret.yaml.example
+│
+├── cluster-config/
+│   ├── install-config-cluster1.example.yaml
+│   └── install-config-cluster2.example.yaml
+│
+├── app.py
+├── Dockerfile
+│
 └── snapshots/
-```
+    ├── 01-acm-managed-clusters.png
+    ├── ...
+    └── 15-Test-Project-Create-Failed.png```
 
 ## Architecture
 
